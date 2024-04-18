@@ -1,0 +1,19 @@
+﻿@page
+@using WebBanPodcast.Areas.Identity.Pages.Account
+@model ConfirmSMSModel
+@{
+    ViewData["Title"] = "Confirm SMS";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="code">Verification Code</label>
+        <input asp-for="Input.Code" type="text" id="code" name="Code" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

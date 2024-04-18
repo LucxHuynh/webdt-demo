@@ -1,0 +1,18 @@
+﻿@model WebBanDienThoai.ViewsModels.DeletePromotionByCategoryViewModel
+@{
+    ViewData["Title"] = "DeletePromotionByCategory";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+<h2>Delete Promotion by Category</h2>
+
+<form asp-action="DeletePromotionByCategory" method="post">
+    <div class="form-group">
+        <label for="categoryId">Select Category:</label>
+        <select class="form-control" id="categoryId" name="categoryId" asp-items="@Model.CategoryList"
+                asp-for="SelectedCategoryId">
+            <option value="">-- Select Category --</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-danger">Delete Promotion</button>
+    <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

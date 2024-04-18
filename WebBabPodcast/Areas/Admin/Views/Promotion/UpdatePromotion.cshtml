@@ -1,0 +1,22 @@
+﻿@model WebBanDienThoai.ViewsModels.UpdatePromotionViewModel
+@{
+    ViewData["Title"] = "UpdatePromotion";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+<h2>Update Promotion</h2>
+
+<form asp-action="UpdatePromotion" method="post">
+    <div class="form-group">
+        <label for="categoryId">Category:</label>
+        <select class="form-control" id="categoryId" name="categoryId" asp-items="@Model.CategoryList">
+            <option value="">-- Select Category --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="promotionId">Promotion:</label>
+        <select class="form-control" id="promotionId" name="promotionId" asp-items="@Model.PromotionList">
+            <option value="">-- Select Promotion --</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Promotion</button>
+</form>

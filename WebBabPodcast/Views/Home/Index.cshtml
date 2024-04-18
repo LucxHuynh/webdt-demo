@@ -1,0 +1,96 @@
+﻿@model WebBanDienThoai.ViewsModels.ProductViewModel
+@{
+    ViewData["Title"] = "Home Page";
+    int numOfQuatity = 1;
+}
+
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isEmployee = User.IsInRole("Employee");
+    var isCustomer = User.IsInRole("Customer");
+}
+
+@if (isAdmin)
+{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+@if (isEmployee)
+{
+    Layout = "~/Areas/Employee/Views/Shared/_Layout_Employee.cshtml";
+}
+
+
+<section class="py-2">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justifycontent-center">
+            @foreach (var item in Model.Prods)
+            {
+                <div class="col mb-5">
+                    <div class="card gap-3" style="width: 18rem">
+                        <img src="images/@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </h5>
+                            <div class="d-flex">
+                                <span>Price: </span>
+                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                @if (item.Price_Promotion != 0)
+                                {
+                                    <p class="mx-3 text-danger">Promotion Price: @item.Price_Promotion.ToString("#,##0") Vnđ</p>
+                                }
+                            </div>
+                            <a class="text-decoration-none" asp-controller="ShoppingCart" asp-action="AddToCart"
+                               asp-route-productId="@item.Id" asp-route-quantity="@numOfQuatity">
+                                @if (isCustomer){
+                                    <button class="btn btn-outline-dark">
+                                        <i class="bi-cart-fill me-1"></i> Add to Cart
+                                    </button>
+                                }
+                            </a>
+                            <a class="text-decoration-none" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
+                                <button class="btn btn-outline-dark">
+                                    Details
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="panel-footer text-center">
+            <ul style="margin-bottom:100px" class="pagination pagination-centered">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="@(i == Model.CurrentPage ? "active" : "")"><a href="@Url.Action("Index", new { page = i })"> <button class="btn btn-outline-dark"> @i </button> </a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $("#postTitle").autocomplete({
+                source: function (request, response) {
+                    // Gửi yêu cầu AJAX đến action Search của ProductController với từ khóa tìm kiếm
+                    $.ajax({
+                        url: "/Product/Search",
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            // Dữ liệu nhận được từ action Search
+                            response(data);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
